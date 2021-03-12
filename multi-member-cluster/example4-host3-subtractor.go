@@ -28,6 +28,8 @@ func main() {
 	}
 	defer subtractorClient.Close()
 
+	fmt.Println("The subtractor is connected.")
+
 	// Create a sessions to aqcuire a lock
 	session, _:= concurrency.NewSession(subtractorClient)
 	defer session.Close()

@@ -21,6 +21,8 @@ func main() {
 	}
 	defer watcherClient.Close()
 
+	fmt.Println("The watcher is connected.")
+
 	rch := watcherClient.Watch(context.Background(), "phoo")
 	for wresp := range rch {
 		for _, ev := range wresp.Events {

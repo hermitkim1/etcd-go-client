@@ -28,6 +28,8 @@ func main() {
 	}
 	defer adderClient.Close()
 
+	fmt.Println("Adder is connected.")
+
 	// Create a sessions to aqcuire a lock
 	session, _:= concurrency.NewSession(adderClient)
 	defer session.Close()
@@ -44,7 +46,7 @@ func main() {
 		if err := lock.Lock(ctx); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("acquired lock for ", *name)
+		fmt.Println("Acquired lock for ", *name)
 
 		resp1, _ := adderClient.Get(context.Background(), myKey)
 		num1, _ := strconv.Atoi(string(resp1.Kvs[0].Value))
@@ -57,7 +59,7 @@ func main() {
 		if err := lock.Unlock(ctx); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("released lock for ", *name)
+		fmt.Println("Released lock for ", *name)
 	}
 
 	var ch chan bool
