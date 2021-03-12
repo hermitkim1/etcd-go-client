@@ -31,7 +31,7 @@ func main() {
 	adderClient.Put(ctx, myKey, strconv.Itoa(50))
 
 	// Try to add value of "phoo" 100 times
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 50; i++ {
 		resp1, _ := adderClient.Get(ctx, myKey)
 		num1, _ := strconv.Atoi(string(resp1.Kvs[0].Value))
 		num1++

@@ -41,7 +41,7 @@ func main() {
 	adderClient.Put(ctx, myKey, strconv.Itoa(50))
 
 	// Try to add value of "phoo" 100 times
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 50; i++ {
 		// Acquire lock (or wait to have it)
 		if err := lock.Lock(ctx); err != nil {
 			log.Fatal(err)

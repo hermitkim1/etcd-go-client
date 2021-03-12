@@ -37,7 +37,7 @@ func main() {
 	lock := concurrency.NewMutex(session, "/distributed-lock/")
 	ctx := context.Background()
 
-	for j := 0; j < 100; j++ {
+	for j := 0; j < 50; j++ {
 		// Acquire lock (or wait to have it)
 		if err := lock.Lock(ctx); err != nil {
 			log.Fatal(err)

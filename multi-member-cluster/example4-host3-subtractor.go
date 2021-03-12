@@ -27,7 +27,7 @@ func main() {
 
 	ctx := context.Background()
 
-	for j := 0; j < 100; j++ {
+	for j := 0; j < 50; j++ {
 		resp2, _ := subtractorClient.Get(ctx, myKey)
 		num2, _ := strconv.Atoi(string(resp2.Kvs[0].Value))
 		num2--
