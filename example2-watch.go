@@ -47,5 +47,5 @@ func main() {
 	}()
 
 	var ch chan bool
-	<- ch // blocks forever
+	<- ch // Block forever
 }

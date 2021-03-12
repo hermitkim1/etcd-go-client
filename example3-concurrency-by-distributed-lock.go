@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	var name = flag.String("name", "foo", "give a name")
+	var name = flag.String("name", "foo", "Give a name")
 	flag.Parse()
 
 	// Watcher Section
@@ -57,11 +57,11 @@ func main() {
 
 	go func() {
 		for i := 0; i < 100; i++ {
-			// acquire lock (or wait to have it)
+			// Acquire lock (or wait to have it)
 			if err := l1.Lock(ctx1); err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println("acquired lock for ", *name)
+			fmt.Println("Acquired lock for ", *name)
 
 			resp1, _ := adderClient.Get(context.Background(), "foo")
 			num1, _ := strconv.Atoi(string(resp1.Kvs[0].Value))
@@ -70,10 +70,11 @@ func main() {
 			adderClient.Put(context.Background(), "foo", strconv.Itoa(num1))
 			time.Sleep(10 * time.Millisecond)
 
+			// Release lock
 			if err := l1.Unlock(ctx1); err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println("released lock for ", *name)
+			fmt.Println("Released lock for ", *name)
 		}
 	}()
 
@@ -87,20 +88,20 @@ func main() {
 	}
 	defer subtractorClient.Close()
 
-	// create a sessions to aqcuire a lock
-	s2, _:= concurrency.NewSession(adderClient)
-	defer s1.Close()
+	// Create a sessions to aqcuire a lock
+	s2, _:= concurrency.NewSession(subtractorClient)
+	defer s2.Close()
 
 	l2 := concurrency.NewMutex(s2, "/distributed-lock/")
 	ctx2 := context.Background()
 
 	go func() {
 		for j := 0; j < 100; j++ {
-			// acquire lock (or wait to have it)
+			// Acquire lock (or wait to have it)
 			if err := l2.Lock(ctx2); err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println("acquired lock for ", *name)
+			fmt.Println("Acquired lock for ", *name)
 
 			resp2, _ := subtractorClient.Get(context.Background(), "foo")
 			num2, _ := strconv.Atoi(string(resp2.Kvs[0].Value))
@@ -109,13 +110,14 @@ func main() {
 			subtractorClient.Put(context.Background(), "foo", strconv.Itoa(num2))
 			time.Sleep(10 * time.Millisecond)
 
+			// Release lock
 			if err := l2.Unlock(ctx2); err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println("released lock for ", *name)
+			fmt.Println("Released lock for ", *name)
 		}
 	}()
 
 	var ch chan bool
-	<- ch // blocks forever
+	<- ch // Block forever
 }

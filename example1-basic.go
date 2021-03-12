@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// expect dial time-out on ipv4 blackhole
+	// Expect dial time-out on ipv4 blackhole
 	_, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{"http://localhost:2373"},
 		DialTimeout: 2 * time.Second,
@@ -18,7 +18,7 @@ func main() {
 
 	// etcd clientv3 >= v3.2.10, grpc/grpc-go >= v1.7.3
 	if err == context.DeadlineExceeded {
-		// handle errors
+		// Handle errors
 	}
 
 	cli2, err := clientv3.New(clientv3.Config{
@@ -26,21 +26,21 @@ func main() {
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
-		// handle error!
+		// Handle error!
 	}
 	defer cli2.Close()
 
 	//ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
 	_, err = cli2.Put(cli2.Ctx(), "sample_key", "sample_value")
 	if err != nil {
-		// handle error!
+		// Handle error!
 	}
 
 	resp, err2 := cli2.Get(cli2.Ctx(), "sample_key")
 	if err2 != nil {
-		// handle error!
+		// Handle error!
 	}
-	// use the response
+	// Use the response
 	fmt.Println(resp.Header)
 	fmt.Println(resp.Kvs)
 
