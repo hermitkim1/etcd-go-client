@@ -41,7 +41,4 @@ func main() {
 	}
 
 	fmt.Println("Done to add")
-
-	var ch chan bool
-	<-ch // Block forever
 }

@@ -37,7 +37,4 @@ func main() {
 	}
 
 	fmt.Println("Done to subtract")
-
-	var ch chan bool
-	<-ch // Block forever
 }
