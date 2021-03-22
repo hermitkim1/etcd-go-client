@@ -1,1 +1,9 @@
 .idea/
+
+# Ignore configuration directory
+# to avoid leaking sensitive information and frequent update
+configs/**
+# Provide templates of configuration files
+# for users to copy and edit
+!configs/template)*
+!configs/config.go
