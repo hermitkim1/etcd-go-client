@@ -56,13 +56,14 @@ func main() {
 	adderClient.Put(context.Background(), "foo", strconv.Itoa(50))
 
 	go func() {
-		for i := 0; i < 100; i++ {
+		for i := 0; i < 50; i++ {
 			// Acquire lock (or wait to have it)
 			if err := l1.Lock(ctx1); err != nil {
 				log.Fatal(err)
 			}
 			fmt.Println("Acquired lock for ", *name)
 
+			// Do value+1 and put the value
 			resp1, _ := adderClient.Get(context.Background(), "foo")
 			num1, _ := strconv.Atoi(string(resp1.Kvs[0].Value))
 			num1++
@@ -96,17 +97,18 @@ func main() {
 	ctx2 := context.Background()
 
 	go func() {
-		for j := 0; j < 100; j++ {
+		for j := 0; j < 50; j++ {
 			// Acquire lock (or wait to have it)
 			if err := l2.Lock(ctx2); err != nil {
 				log.Fatal(err)
 			}
 			fmt.Println("Acquired lock for ", *name)
 
+			// Do value-1 and put the value
 			resp2, _ := subtractorClient.Get(context.Background(), "foo")
 			num2, _ := strconv.Atoi(string(resp2.Kvs[0].Value))
 			num2--
-			fmt.Printf("Subtractordder: %v\n", num2)
+			fmt.Printf("Subtractor: %v\n", num2)
 			subtractorClient.Put(context.Background(), "foo", strconv.Itoa(num2))
 			time.Sleep(10 * time.Millisecond)
 

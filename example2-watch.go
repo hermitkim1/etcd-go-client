@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-
 func main() {
 	putterClient, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{"localhost:2379"},
@@ -21,7 +20,7 @@ func main() {
 	defer putterClient.Close()
 
 	go func() {
-		for i := 0; i < 100; i++ {
+		for i := 0; i < 50; i++ {
 			putterClient.Put(context.Background(), "foo", strconv.Itoa(i))
 			time.Sleep(10 * time.Millisecond)
 		}
@@ -47,5 +46,5 @@ func main() {
 	}()
 
 	var ch chan bool
-	<- ch // Block forever
+	<-ch // Block forever
 }
