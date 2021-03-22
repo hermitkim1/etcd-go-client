@@ -40,6 +40,7 @@ source go-installation.sh
 - example1-basic.go: 기본 예제
 - example2-watch.go: Watch 기능을 활용한 예제
 - example3-concurrency-by-distributed-lock.go: Adder와 Subtractor가 덧셈과 뺄셈을 반복하는 Race condition 예제로 Distributed lock (분산 락)을 활용하여 동시성 보장을 확인하는 예제
+- example4-atomic-compare-and-swap.go: Atomic Compare-And-Swap (CAS) 기능을 활용하여 동시성 보장을 확인하는 예제
 
 ## etcd multi-member cluster 구성 가이드 (On multi-cloud)
 Single Point Of Failre (SPOF) 회피를 위해 etcd cluster를 구성하였습니다.
@@ -49,7 +50,9 @@ Single Point Of Failre (SPOF) 회피를 위해 etcd cluster를 구성하였습�
 
 ## etcd Go client examples running on a multi-member cluster
 - example4-host1-watcher.go: etcd cluster의 "phoo" key값을 Watch하는 예제
-- example4-host2-adder-with-lock.go: etcd cluster의 "phoo" key값을 1씩 더하는 예제로 Distributed lock이 적용되어 있음
 - example4-host2-adder.go: etcd cluster의 "phoo" key값을 1씩 더하는 예제
-- example4-host3-subtractor-with-lock.go: etcd cluster의 "phoo" key값을 1씩 빼는 예제로 Distributed lock이 적용되어 있음
+- example4-host2-adder-with-lock.go: etcd cluster의 "phoo" key값을 1씩 더하는 예제로 Distributed lock이 적용되어 있음
+- example4-host2-adder-with-case.go: etcd cluster의 "phoo" key값을 1씩 더하는 예제로 Compare-and-swap(CAS)이 적용되어 있음
 - example4-host3-subtractor.go: etcd cluster의 "phoo" key값을 1씩 빼는 예제
+- example4-host3-subtractor-with-lock.go: etcd cluster의 "phoo" key값을 1씩 빼는 예제로 Distributed lock이 적용되어 있음
+- example4-host3-subtractor-with-cas.go: etcd cluster의 "phoo" key값을 1씩 빼는 예제로 Compare-and-swap(CAS)이 적용되어 있음
