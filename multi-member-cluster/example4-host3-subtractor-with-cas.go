@@ -28,7 +28,6 @@ func main() {
 	fmt.Println("The subtractor is connected.")
 
 	requestTimeout := 10 * time.Second
-	ctx, _ := context.WithTimeout(context.Background(), requestTimeout)
 
 	for j := 0; j < 500; j++ {
 		// Try compare-and-swap until succeeded
@@ -40,6 +39,7 @@ func main() {
 			fmt.Printf("[Subtractor] Value2(%v), num(%v)\n", value, num)
 
 			// Compare-and-Swap (CAS)
+			ctx, _ := context.WithTimeout(context.TODO(), requestTimeout)
 			txResp2, err2 := subtractorClient.Txn(ctx).
 				If(clientv3.Compare(clientv3.Value(myKey), "=", value)).
 				Then(clientv3.OpPut(myKey, strconv.Itoa(num))).

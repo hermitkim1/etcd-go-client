@@ -34,10 +34,9 @@ func main() {
 	fmt.Println("Adder is connected.")
 
 	requestTimeout := 10 * time.Second
-	ctx, _ := context.WithTimeout(context.Background(), requestTimeout)
 
 	// Set "phoo" with "50" initially
-	adderClient.Put(ctx, myKey, strconv.Itoa(50))
+	adderClient.Put(context.Background(), myKey, strconv.Itoa(50))
 
 	// Try to add(+1) value of "phoo" 50 times
 	for i := 0; i < 500; i++ {
@@ -50,6 +49,7 @@ func main() {
 			fmt.Printf("[Adder] Value1(%v), num(%v)\n", value, num)
 
 			// Compare-and-Swap (CAS)
+			ctx, _ := context.WithTimeout(context.TODO(), requestTimeout)
 			txResp, err2 := adderClient.Txn(ctx).
 				If(clientv3.Compare(clientv3.Value(myKey), "=", value)).
 				Then(clientv3.OpPut(myKey, strconv.Itoa(num))).
