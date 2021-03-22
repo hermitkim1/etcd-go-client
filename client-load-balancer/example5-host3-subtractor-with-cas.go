@@ -35,7 +35,7 @@ func main() {
 
 	requestTimeout := 10 * time.Second
 
-	for j := 0; j < 500; j++ {
+	for j := 0; j < 50; j++ {
 		// Try compare-and-swap until succeeded
 		for {
 			resp, _ := subtractorClient.Get(context.Background(), myKey)

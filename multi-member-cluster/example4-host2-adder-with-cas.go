@@ -34,7 +34,7 @@ func main() {
 	adderClient.Put(context.Background(), myKey, strconv.Itoa(50))
 
 	// Try to add(+1) value of "phoo" 50 times
-	for i := 0; i < 500; i++ {
+	for i := 0; i < 50; i++ {
 		// Try compare-and-swap until succeeded
 		for {
 			resp, _ := adderClient.Get(context.Background(), myKey)
