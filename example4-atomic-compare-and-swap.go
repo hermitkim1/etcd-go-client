@@ -78,9 +78,9 @@ func main() {
 					break
 				}
 
-				time.Sleep(1 * time.Millisecond)
+				//time.Sleep(1 * time.Millisecond)
 			}
-			time.Sleep(1 * time.Millisecond)
+			//time.Sleep(1 * time.Millisecond)
 		}
 	}()
 
@@ -123,9 +123,9 @@ func main() {
 				if txResp2.Succeeded {
 					break
 				}
-				time.Sleep(1 * time.Millisecond)
+				//time.Sleep(1 * time.Millisecond)
 			}
-			time.Sleep(1 * time.Millisecond)
+			//time.Sleep(1 * time.Millisecond)
 		}
 	}()
 

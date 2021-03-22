@@ -66,10 +66,9 @@ func main() {
 			if txResp.Succeeded {
 				break
 			}
-
-			time.Sleep(1 * time.Millisecond)
+			//time.Sleep(1 * time.Millisecond)
 		}
-		time.Sleep(1 * time.Millisecond)
+		//time.Sleep(1 * time.Millisecond)
 	}
 
 	fmt.Println("Done to add")

@@ -49,7 +49,7 @@ func main() {
 		num2--
 		fmt.Printf("Subtractordder: %v\n", num2)
 		subtractorClient.Put(ctx, myKey, strconv.Itoa(num2))
-		time.Sleep(10 * time.Millisecond)
+		//time.Sleep(1 * time.Millisecond)
 
 		// Release lock
 		if err := lock.Unlock(ctx); err != nil {

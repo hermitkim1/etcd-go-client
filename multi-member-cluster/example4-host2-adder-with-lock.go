@@ -53,7 +53,7 @@ func main() {
 		num1++
 		fmt.Printf("Adder: %v\n", num1)
 		adderClient.Put(ctx, myKey, strconv.Itoa(num1))
-		time.Sleep(10 * time.Millisecond)
+		//time.Sleep(1 * time.Millisecond)
 
 		// Release lock
 		if err := lock.Unlock(ctx); err != nil {

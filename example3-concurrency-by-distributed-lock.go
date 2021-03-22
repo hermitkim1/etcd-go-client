@@ -69,7 +69,7 @@ func main() {
 			num1++
 			fmt.Printf("Adder: %v\n", num1)
 			adderClient.Put(context.Background(), "foo", strconv.Itoa(num1))
-			time.Sleep(10 * time.Millisecond)
+			//time.Sleep(10 * time.Millisecond)
 
 			// Release lock
 			if err := l1.Unlock(ctx1); err != nil {
@@ -110,7 +110,7 @@ func main() {
 			num2--
 			fmt.Printf("Subtractor: %v\n", num2)
 			subtractorClient.Put(context.Background(), "foo", strconv.Itoa(num2))
-			time.Sleep(10 * time.Millisecond)
+			//time.Sleep(10 * time.Millisecond)
 
 			// Release lock
 			if err := l2.Unlock(ctx2); err != nil {

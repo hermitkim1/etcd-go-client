@@ -55,9 +55,9 @@ func main() {
 			if txResp2.Succeeded {
 				break
 			}
-			time.Sleep(1 * time.Millisecond)
+			//time.Sleep(1 * time.Millisecond)
 		}
-		time.Sleep(1 * time.Millisecond)
+		//time.Sleep(1 * time.Millisecond)
 	}
 
 	fmt.Println("Done to subtract")
