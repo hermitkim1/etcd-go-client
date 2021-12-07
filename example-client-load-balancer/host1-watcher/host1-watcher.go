@@ -4,16 +4,16 @@ import (
 	"context"
 	"etcd-go-client/configs"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
 	"log"
 	"path/filepath"
 	"time"
-)
 
+	clientv3 "go.etcd.io/etcd/client/v3"
+)
 
 func main() {
 	// Load config
-	configPath := filepath.Join("..", "configs", "config.yaml")
+	configPath := filepath.Join("..", "..", "configs", "config.yaml")
 	config, _ := configs.LoadConfig(configPath)
 
 	// Watcher Section
@@ -36,5 +36,5 @@ func main() {
 	}
 
 	var ch chan bool
-	<- ch // blocks forever
+	<-ch // blocks forever
 }

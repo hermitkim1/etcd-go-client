@@ -4,13 +4,13 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
-	"go.etcd.io/etcd/client/v3/concurrency"
 	"log"
 	"strconv"
 	"time"
-)
 
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
+)
 
 func main() {
 
@@ -31,7 +31,7 @@ func main() {
 	fmt.Println("Adder is connected.")
 
 	// Create a sessions to aqcuire a lock
-	session, _:= concurrency.NewSession(adderClient)
+	session, _ := concurrency.NewSession(adderClient)
 	defer session.Close()
 
 	lock := concurrency.NewMutex(session, "/distributed-lock/")

@@ -5,60 +5,56 @@ import (
 	"etcd-go-client/configs"
 	"flag"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
-	"go.etcd.io/etcd/client/v3/concurrency"
 	"log"
 	"path/filepath"
 	"strconv"
 	"time"
-)
 
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
+)
 
 func main() {
 
 	// Load config
-	configPath := filepath.Join("..", "configs", "config.yaml")
+	configPath := filepath.Join("..", "..", "configs", "config.yaml")
 	config, _ := configs.LoadConfig(configPath)
 
 	var myKey = "phoo"
-	var name = flag.String("name", myKey, "give a name")
+	var name = flag.String("name", myKey, "Give a name")
 	flag.Parse()
 
-	// Adder Section
-	adderClient, err := clientv3.New(clientv3.Config{
+	// Subtractor Section
+	subtractorClient, err := clientv3.New(clientv3.Config{
 		Endpoints:   config.ETCD.Endpoints,
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer adderClient.Close()
+	defer subtractorClient.Close()
 
-	fmt.Println("Adder is connected.")
+	fmt.Println("The subtractor is connected.")
 
 	// Create a sessions to aqcuire a lock
-	session, _:= concurrency.NewSession(adderClient)
+	session, _ := concurrency.NewSession(subtractorClient)
 	defer session.Close()
 
 	lock := concurrency.NewMutex(session, "/distributed-lock/")
 	ctx := context.Background()
 
-	// Set "phoo" with "50" initially
-	adderClient.Put(ctx, myKey, strconv.Itoa(50))
-
-	// Try to add value of "phoo" 100 times
-	for i := 0; i < 50; i++ {
+	for j := 0; j < 50; j++ {
 		// Acquire lock (or wait to have it)
 		if err := lock.Lock(ctx); err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println("Acquired lock for ", *name)
 
-		resp1, _ := adderClient.Get(ctx, myKey)
-		num1, _ := strconv.Atoi(string(resp1.Kvs[0].Value))
-		num1++
-		fmt.Printf("Adder: %v\n", num1)
-		adderClient.Put(ctx, myKey, strconv.Itoa(num1))
+		resp2, _ := subtractorClient.Get(ctx, myKey)
+		num2, _ := strconv.Atoi(string(resp2.Kvs[0].Value))
+		num2--
+		fmt.Printf("Subtractordder: %v\n", num2)
+		subtractorClient.Put(ctx, myKey, strconv.Itoa(num2))
 		//time.Sleep(1 * time.Millisecond)
 
 		// Release lock
@@ -68,5 +64,5 @@ func main() {
 		fmt.Println("Released lock for ", *name)
 	}
 
-	fmt.Println("Done to add")
+	fmt.Println("Done to subtract")
 }

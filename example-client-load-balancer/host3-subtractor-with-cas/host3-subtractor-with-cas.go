@@ -15,55 +15,50 @@ import (
 func main() {
 
 	// Load config
-	configPath := filepath.Join("..", "configs", "config.yaml")
+	configPath := filepath.Join("..", "..", "configs", "config.yaml")
 	config, _ := configs.LoadConfig(configPath)
 
 	var myKey = "phoo"
 	flag.Parse()
 
-	// Adder Section
-	adderClient, err := clientv3.New(clientv3.Config{
+	// Subtractor Section
+	subtractorClient, err := clientv3.New(clientv3.Config{
 		Endpoints:   config.ETCD.Endpoints,
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer adderClient.Close()
+	defer subtractorClient.Close()
 
-	fmt.Println("Adder is connected.")
+	fmt.Println("The subtractor is connected.")
 
 	requestTimeout := 10 * time.Second
 
-	// Set "phoo" with "50" initially
-	adderClient.Put(context.Background(), myKey, strconv.Itoa(50))
-
-	// Try to add(+1) value of "phoo" 50 times
-	for i := 0; i < 50; i++ {
+	for j := 0; j < 50; j++ {
 		// Try compare-and-swap until succeeded
 		for {
-			resp, _ := adderClient.Get(context.Background(), myKey)
+			resp, _ := subtractorClient.Get(context.Background(), myKey)
 			value := string(resp.Kvs[0].Value)
 			num, _ := strconv.Atoi(value)
-			num++
-			fmt.Printf("[Adder] Value1(%v), num(%v)\n", value, num)
+			num--
+			fmt.Printf("[Subtractor] Value2(%v), num(%v)\n", value, num)
 
 			// Compare-and-Swap (CAS)
 			ctx, _ := context.WithTimeout(context.TODO(), requestTimeout)
-			txResp, err2 := adderClient.Txn(ctx).
+			txResp2, err2 := subtractorClient.Txn(ctx).
 				If(clientv3.Compare(clientv3.Value(myKey), "=", value)).
 				Then(clientv3.OpPut(myKey, strconv.Itoa(num))).
 				Else(clientv3.OpGet(myKey)).
 				Commit()
 
 			if err2 != nil {
-				fmt.Printf("[Adder] i(%v) - Err1: %v\n", i, err2)
-				//cancel1()
-
+				fmt.Printf("[Subtractor] j(%v) - Err2: %v\n", j, err2)
 			}
-			fmt.Printf("[Adder] i(%v) - txResp: %v\n", i, txResp)
 
-			if txResp.Succeeded {
+			fmt.Printf("[Subtractor] j(%v) - txResp2: %v\n", j, txResp2)
+
+			if txResp2.Succeeded {
 				break
 			}
 			//time.Sleep(1 * time.Millisecond)
@@ -71,5 +66,5 @@ func main() {
 		//time.Sleep(1 * time.Millisecond)
 	}
 
-	fmt.Println("Done to add")
+	fmt.Println("Done to subtract")
 }
