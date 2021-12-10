@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func main() {
@@ -13,8 +14,6 @@ func main() {
 		Endpoints:   []string{"http://localhost:2373"},
 		DialTimeout: 2 * time.Second,
 	})
-
-
 
 	// etcd clientv3 >= v3.2.10, grpc/grpc-go >= v1.7.3
 	if err == context.DeadlineExceeded {

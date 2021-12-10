@@ -4,10 +4,11 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
 	"log"
 	"strconv"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func main() {
@@ -28,7 +29,6 @@ func main() {
 	fmt.Println("Adder is connected.")
 
 	requestTimeout := 10 * time.Second
-
 
 	// Set "phoo" with "50" initially
 	adderClient.Put(context.Background(), myKey, strconv.Itoa(50))

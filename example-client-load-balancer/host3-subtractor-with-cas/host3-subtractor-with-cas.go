@@ -5,11 +5,12 @@ import (
 	"etcd-go-client/configs"
 	"flag"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
 	"log"
 	"path/filepath"
 	"strconv"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 func main() {

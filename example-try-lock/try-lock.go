@@ -27,11 +27,6 @@ func mockController(wg *sync.WaitGroup, name string, keyToTest string, keyToUpda
 	}
 	defer etcdClient.Close()
 
-	// create a sessions to aqcuire a lock
-	s, _ := concurrency.NewSession(etcdClient)
-	defer s.Close()
-	ctx := context.Background()
-
 	rch := etcdClient.Watch(context.Background(), keyToTest)
 	for wresp := range rch {
 		for _, ev := range wresp.Events {
@@ -39,11 +34,15 @@ func mockController(wg *sync.WaitGroup, name string, keyToTest string, keyToUpda
 			fmt.Printf("\n[%s] Watch - %s %q : %q\n", name, ev.Type, ev.Kv.Key, ev.Kv.Value)
 			keyPrefix := fmt.Sprintf("%s-%d", keyToUpdate, wresp.Header.GetRevision())
 			// fmt.Printf("%#v\n", keyPrefix)
+
+			// create a sessions to aqcuire a lock
+			s, _ := concurrency.NewSession(etcdClient)
+			defer s.Close()
+			ctx := context.Background()
 			l := concurrency.NewMutex(s, keyPrefix)
 
 			// Try to acquire lock (or wait to have it)
-			err := l.TryLock(ctx)
-			if err != nil {
+			if err := l.TryLock(ctx); err != nil {
 				fmt.Printf("[%s] '%s' is locked\n", name, keyPrefix)
 				log.Println(err)
 			} else {

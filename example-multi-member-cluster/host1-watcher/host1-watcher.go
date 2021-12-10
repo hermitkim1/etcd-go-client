@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
 	"log"
 	"time"
-)
 
+	clientv3 "go.etcd.io/etcd/client/v3"
+)
 
 func main() {
 
@@ -31,5 +31,5 @@ func main() {
 	}
 
 	var ch chan bool
-	<- ch // blocks forever
+	<-ch // blocks forever
 }

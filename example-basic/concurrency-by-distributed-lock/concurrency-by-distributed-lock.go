@@ -4,13 +4,13 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"go.etcd.io/etcd/client/v3"
-	"go.etcd.io/etcd/client/v3/concurrency"
 	"log"
 	"strconv"
 	"time"
-)
 
+	clientv3 "go.etcd.io/etcd/client/v3"
+	"go.etcd.io/etcd/client/v3/concurrency"
+)
 
 func main() {
 
@@ -47,7 +47,7 @@ func main() {
 	defer adderClient.Close()
 
 	// Create a sessions to aqcuire a lock
-	s1, _:= concurrency.NewSession(adderClient)
+	s1, _ := concurrency.NewSession(adderClient)
 	defer s1.Close()
 
 	l1 := concurrency.NewMutex(s1, "/distributed-lock/")
@@ -90,7 +90,7 @@ func main() {
 	defer subtractorClient.Close()
 
 	// Create a sessions to aqcuire a lock
-	s2, _:= concurrency.NewSession(subtractorClient)
+	s2, _ := concurrency.NewSession(subtractorClient)
 	defer s2.Close()
 
 	l2 := concurrency.NewMutex(s2, "/distributed-lock/")
@@ -121,5 +121,5 @@ func main() {
 	}()
 
 	var ch chan bool
-	<- ch // Block forever
+	<-ch // Block forever
 }
