@@ -29,13 +29,14 @@ func main() {
 
 		rch := watcherClient.Watch(context.Background(), "root", clientv3.WithPrefix())
 		for wresp := range rch {
+			fmt.Printf("%#v\n", wresp)
 			for _, ev := range wresp.Events {
 				fmt.Printf("Watch - %s %q : %q\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
 			}
 		}
 	}()
 
-	time.Sleep(1000)
+	time.Sleep(3 * time.Second)
 	// Adder Section
 	updaterClient, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{"localhost:2379"},
@@ -54,8 +55,12 @@ func main() {
 	// ctx1 := context.Background()
 
 	updaterClient.Put(context.Background(), "root", "I'm root")
-	updaterClient.Put(context.Background(), "root/depth1", "I'm depth1")
-	updaterClient.Put(context.Background(), "root/depth1/depth2", "I'm depth2")
+	time.Sleep(1 * time.Second)
+	updaterClient.Put(context.Background(), "root/d1-key1", "I'm d1-key1")
+	time.Sleep(1 * time.Second)
+	updaterClient.Put(context.Background(), "root/d1-key1/d2-key1", "I'm d2-key1")
+	time.Sleep(1 * time.Second)
+	updaterClient.Put(context.Background(), "root/d1-key1/d2-key2", "I'm d2-key2")
 
 	var ch chan bool
 	<-ch // Block forever
