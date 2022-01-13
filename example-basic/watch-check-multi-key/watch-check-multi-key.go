@@ -30,22 +30,33 @@ func main() {
 		}
 		defer watcherClient.Close()
 
-		rch := watcherClient.Watch(context.Background(), "foo", clientv3.WithPrefix())
+		rch := watcherClient.Watch(context.Background(), "group", clientv3.WithPrefix())
 		for wresp := range rch {
 			for _, ev := range wresp.Events {
 				fmt.Printf("Watcher - %s %q : %q\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
-
 			}
 		}
 	}()
 
+	time.Sleep(1 * time.Second)
+
 	go func() {
 		for i := 0; i < 5; i++ {
-			key := "foo/" + strconv.Itoa(i)
+			key := "group/" + strconv.Itoa(i)
 			putterClient.Put(context.Background(), key, strconv.Itoa(i))
 			time.Sleep(10 * time.Millisecond)
 		}
 	}()
+	time.Sleep(1 * time.Second)
+
+	go func() {
+		for i := 0; i < 5; i++ {
+			key := "group/1/host/" + strconv.Itoa(i)
+			putterClient.Put(context.Background(), key, strconv.Itoa(i))
+			time.Sleep(10 * time.Millisecond)
+		}
+	}()
+	time.Sleep(1 * time.Second)
 
 	var ch chan bool
 	<-ch // Block forever
