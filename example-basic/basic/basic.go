@@ -30,15 +30,35 @@ func main() {
 	defer cli2.Close()
 
 	//ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
-	_, err = cli2.Put(cli2.Ctx(), "sample_key", "sample_value")
+	_, err = cli2.Put(cli2.Ctx(), "sample_key/111111111", "sample_value1")
+	if err != nil {
+		// Handle error!
+	}
+	_, err = cli2.Put(cli2.Ctx(), "sample_key/222222222", "22222222222222222222222222222222")
+	if err != nil {
+		// Handle error!
+	}
+	_, err = cli2.Put(cli2.Ctx(), "sample_key/3", "33")
 	if err != nil {
 		// Handle error!
 	}
 
-	resp, err2 := cli2.Get(cli2.Ctx(), "sample_key")
+	resp, err2 := cli2.Get(cli2.Ctx(), "sample_key", clientv3.WithPrefix())
 	if err2 != nil {
 		// Handle error!
 	}
+
+	fmt.Printf("GetResponse: %v\n", resp)
+	headerSize := resp.Header.Size()
+	fmt.Printf("Header size: %v\n", headerSize)
+	kvSize := 0
+	for _, kv := range resp.Kvs {
+		kvSize += kv.Size()
+	}
+	fmt.Printf("Kvs size: %v\n", kvSize)
+	totalSize := headerSize + kvSize
+	fmt.Printf("Total size: %v\n", totalSize)
+
 	// Use the response
 	fmt.Println(resp.Header)
 	fmt.Println(resp.Kvs)
